@@ -25,4 +25,9 @@ class Site extends Model
   {
     return $this->hasMany(LoginQuestion::class)->with('user_login_questions');
   }
+
+  public function settings()
+  {
+    return $this->hasMany(Setting::class);
+  }
 }
