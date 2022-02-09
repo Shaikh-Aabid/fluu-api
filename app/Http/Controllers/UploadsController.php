@@ -43,8 +43,6 @@ class UploadsController extends Controller
 
       $user->roles = $user->roles;
       $user->sites = $user->sites;
-
-      
     }
     if ($request->hasFile('gallery_image_path')) {
       $file = $request->file('gallery_image_path');
@@ -59,8 +57,6 @@ class UploadsController extends Controller
 
       $user->roles = $user->roles;
       $user->sites = $user->sites;
-
-      
     }
     if ($request->hasFile('voice_clip_path')) {
       $file = $request->file('voice_clip_path');
@@ -75,8 +71,6 @@ class UploadsController extends Controller
 
       $user->roles = $user->roles;
       $user->sites = $user->sites;
-
-      
     }
 
     return response()->json([
@@ -104,8 +98,6 @@ class UploadsController extends Controller
       $UserStory = UserStory::where('id', '=', request()->userid)->first();
       $UserStory->image_path = $imagePath;
       $UserStory->update();
-
-      
     }
 
     if ($request->hasFile('video_path')) {
@@ -118,8 +110,6 @@ class UploadsController extends Controller
       $UserStory = UserStory::where('id', '=', request()->userid)->first();
       $UserStory->video_path = $imagePath;
       $UserStory->update();
-
-      
     }
 
     return response()->json([
@@ -130,5 +120,59 @@ class UploadsController extends Controller
     ]);
   }
 
-  
+  public function uploadBannerImage(Request $request)
+  {
+    $request->validate([
+      'settingid'        => 'required',
+    ]);
+
+    $banner_path_1 = '';
+    if ($request->hasFile('banner_path_1')) {
+      $file = $request->file('banner_path_1');
+      $name = $request->filename ?? 'photo.';
+      $name = $name . $file->getClientOriginalExtension();;
+      $banner_path_1 = 'banner/' .  $request->userid . '/' . $name;
+      Storage::disk('local')->put($banner_path_1, file_get_contents($file), 'public');
+
+      $setting = UserStory::where('id', '=', request()->userid)->first();
+      $setting->banner_path_1 = $banner_path_1;
+      $setting->update();
+    }
+
+    $banner_path_2 = '';
+    if ($request->hasFile('banner_path_2')) {
+      $file = $request->file('banner_path_2');
+      $name = $request->filename ?? 'photo.';
+      $name = $name . $file->getClientOriginalExtension();;
+      $banner_path_2 = 'banner/' .  $request->userid . '/' . $name;
+      Storage::disk('local')->put($banner_path_2, file_get_contents($file), 'public');
+
+      $setting = UserStory::where('id', '=', request()->userid)->first();
+      $setting->banner_path_2 = $banner_path_2;
+      $setting->update();
+    }
+
+    $banner_path_3 = '';
+    if ($request->hasFile('banner_path_3')) {
+      $file = $request->file('banner_path_3');
+      $name = $request->filename ?? 'photo.';
+      $name = $name . $file->getClientOriginalExtension();;
+      $banner_path_3 = 'banner/' .  $request->userid . '/' . $name;
+      Storage::disk('local')->put($banner_path_3, file_get_contents($file), 'public');
+
+      $setting = UserStory::where('id', '=', request()->userid)->first();
+      $setting->banner_path_3 = $banner_path_3;
+      $setting->update();
+    }
+
+
+    return response()->json([
+      'data'  => [
+        'banner_path_1'  =>  $banner_path_1,
+        'banner_path_2'  =>  $banner_path_2,
+        'banner_path_3'  =>  $banner_path_3,
+      ],
+      'success' =>  true
+    ]);
+  }
 }
